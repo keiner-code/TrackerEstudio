@@ -5,7 +5,13 @@ import ModalSelectorProject from "@/presentation/components/details/ModalSelecto
 import ProgressCard from "@/presentation/components/details/ProgressCard";
 import { useDetailsScreen } from "@/presentation/hooks/useDetailsScreen";
 import { Ionicons } from "@expo/vector-icons";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function DetailsScreen() {
   const {
@@ -64,38 +70,43 @@ export default function DetailsScreen() {
             </TouchableOpacity>
           </View>
 
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            className="px-6"
-            contentContainerStyle={{ paddingTop: 10 }}
-          >
-            <View className="mb-6">
-              <View className="flex-row items-center mb-3">
-                <View className="bg-light-primary/20 dark:bg-dark-primary/20 px-3 py-1.5 rounded-full mr-3 border border-transparent dark:border-dark-border">
-                  <Text className="text-light-primary dark:text-dark-primary font-mono font-bold text-xs uppercase tracking-wider">
-                    {selectedItem.status}
-                  </Text>
+          <KeyboardAvoidingView>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              className="px-6"
+              contentContainerStyle={{ paddingTop: 10 }}
+            >
+              <View className="mb-6">
+                <View className="flex-row items-center mb-3">
+                  <View className="bg-light-primary/20 dark:bg-dark-primary/20 px-3 py-1.5 rounded-full mr-3 border border-transparent dark:border-dark-border">
+                    <Text className="text-light-primary dark:text-dark-primary font-mono font-bold text-xs uppercase tracking-wider">
+                      {selectedItem.status}
+                    </Text>
+                  </View>
                 </View>
+
+                <ProgressCard
+                  progress={selectedItem.progress}
+                  project_id={selectedItem.id}
+                />
               </View>
 
-              <ProgressCard
-                progress={selectedItem.progress}
-                project_id={selectedItem.id}
+              <CommentInputText project_id={selectedItem.id} />
+
+              <AddTimerToDay
+                id={selectedItem.id}
+                total_hours={selectedItem.total_hours}
+                hour_for_day={selectedItem.hours_per_day}
               />
-            </View>
 
-            <CommentInputText project_id={selectedItem.id} />
+              <CommentsContent
+                project_id={selectedItem.id}
+                color={theme.icon}
+              />
 
-            <AddTimerToDay
-              id={selectedItem.id}
-              total_hours={selectedItem.total_hours}
-              hour_for_day={selectedItem.hours_per_day}
-            />
-
-            <CommentsContent project_id={selectedItem.id} color={theme.icon} />
-
-            <View className="h-10" />
-          </ScrollView>
+              <View className="h-10" />
+            </ScrollView>
+          </KeyboardAvoidingView>
 
           <ModalSelectorProject
             pickerVisible={pickerVisible}

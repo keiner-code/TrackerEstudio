@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/colors";
-import { PROJECT } from "@/constants/vars";
+import { COMMENTS, PROJECT } from "@/constants/vars";
 import CreateCommentAction from "@/presentation/actions/create-comment.action";
 import { Ionicons } from "@expo/vector-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -22,8 +22,11 @@ export default function CommentInputText({ project_id }: Props) {
 
   const mutation = useMutation({
     mutationFn: CreateCommentAction,
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: [PROJECT] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [PROJECT] }),
+        queryClient.invalidateQueries({ queryKey: [COMMENTS] }),
+      ]);
       setNote("");
     },
   });

@@ -24,11 +24,13 @@ export default function useModalCreate(
 
   const mutation = useMutation({
     mutationFn: (data: createProject) => createProjectAction(data),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       setModalVisible(false);
-      queryClient.invalidateQueries({
-        queryKey: [PROJECT, SCHEDULE, COMMENTS],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [PROJECT] }),
+        queryClient.invalidateQueries({ queryKey: [SCHEDULE] }),
+        queryClient.invalidateQueries({ queryKey: [COMMENTS] }),
+      ]);
 
       if (data.ok) {
         reset({ description: "", language_id: "", title: "", study_day: "" });

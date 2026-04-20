@@ -42,7 +42,7 @@ export default function ModalCreateProject({
       onRequestClose={() => setModalVisible(false)}
     >
       <View
-        className="flex-1 justify-center items-center px-6"
+        className="flex-1 mt-28 items-center px-6"
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
         <View className="w-full bg-light-surface dark:bg-dark-surface rounded-3xl p-6 shadow-lg border border-transparent dark:border-dark-border">
