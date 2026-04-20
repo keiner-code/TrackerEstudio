@@ -5,8 +5,10 @@ import ModalSelectorProject from "@/presentation/components/details/ModalSelecto
 import ProgressCard from "@/presentation/components/details/ProgressCard";
 import { useDetailsScreen } from "@/presentation/hooks/useDetailsScreen";
 import { Ionicons } from "@expo/vector-icons";
+import { useHeaderHeight } from "@react-navigation/elements";
 import {
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -22,6 +24,7 @@ export default function DetailsScreen() {
     setSelectedItem,
     projects,
   } = useDetailsScreen();
+  const headerHeight = useHeaderHeight();
 
   return (
     <View className="flex-1 bg-light-background dark:bg-dark-background pt-6">
@@ -70,7 +73,11 @@ export default function DetailsScreen() {
             </TouchableOpacity>
           </View>
 
-          <KeyboardAvoidingView>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={headerHeight}
+          >
             <ScrollView
               showsVerticalScrollIndicator={false}
               className="px-6"
