@@ -38,9 +38,6 @@ export default function LanguageCards() {
             <Text className="text-light-text dark:text-dark-text font-bold font-sans text-lg mb-1">
               {lang.name}
             </Text>
-            <Text className="text-light-icon dark:text-dark-icon font-mono uppercase text-[10px] tracking-widest font-bold">
-              {lang.project_size}
-            </Text>
           </TouchableOpacity>
         ))
       )}

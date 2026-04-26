@@ -70,15 +70,31 @@ const migrations: Migration[] = [
     },
   },
 
-  // {
-  //   version: "002",
-  //   name: "add_new_field",
-  //   up: async () => {
-  //     await sqliteDatabase.execSync(
-  //       `ALTER TABLE projects ADD COLUMN new_field TEXT;`
-  //     );
-  //   },
-  // },
+  {
+    version: "004",
+    name: "create_table_user",
+    up: async () => {
+      await sqliteDatabase.execAsync(
+        `CREATE TABLE IF NOT EXISTS user (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          last_name TEXT NOT NULL,
+          age INTEGER NOT NULL,
+          created_at TEXT DEFAULT (datetime('now', 'localtime')),
+          updated_at TEXT DEFAULT (datetime('now', 'localtime'))
+        );`,
+      );
+    },
+  },
+  {
+    version: "005",
+    name: "add_photo_to_user",
+    up: async () => {
+      await sqliteDatabase.execAsync(
+        `ALTER TABLE user ADD COLUMN photo TEXT;`,
+      );
+    },
+  },
 ];
 
 export const runMigrations = async () => {

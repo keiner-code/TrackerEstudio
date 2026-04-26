@@ -5,6 +5,7 @@ export const PROJECT = "projects";
 export const LANGUAGES = "languages";
 export const SCHEDULE = "schedule";
 export const COMMENTS = "comments";
+export const USER = "user";
 
 export const THEME = (colorScheme: ColorSchemeName) =>
   colorScheme === "dark" ? Colors.dark : Colors.light;

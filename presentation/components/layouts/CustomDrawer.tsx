@@ -120,16 +120,9 @@ export default function CustomDrawer() {
         }}
       />
       <Drawer.Screen
-        name="auth/login/index"
-        options={{
-          title: " Iniciar Sesión",
-          drawerItemStyle: { display: "none" },
-        }}
-      />
-      <Drawer.Screen
         name="auth/register/index"
         options={{
-          title: " Registro",
+          title: " Agrega tus datos",
           drawerItemStyle: { display: "none" },
         }}
       />

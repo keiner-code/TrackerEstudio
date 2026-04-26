@@ -60,10 +60,10 @@ export default function HomeScreen() {
             <View className="flex-row justify-between items-center mb-6">
               <View>
                 <Text className="text-white/80 font-medium font-sans text-sm mb-1">
-                  Enfoque Actual {queryProject.data![0].id}
+                  Enfoque Actual: {queryProject.data![0].language.name}
                 </Text>
                 <Text className="text-white font-bold font-sans text-2xl">
-                  {queryProject.data![0].language.name}
+                  {queryProject.data![0].title}
                 </Text>
               </View>
               <View className="w-14 h-14 bg-white/40 rounded-2xl items-center justify-center">

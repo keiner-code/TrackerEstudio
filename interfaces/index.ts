@@ -31,6 +31,16 @@ export interface CreateLanguage {
   color: string;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  lastName: string;
+  age: string;
+  photo?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface createProject {
   title: string;
   language_id: string;

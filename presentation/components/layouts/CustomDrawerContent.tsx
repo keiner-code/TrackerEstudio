@@ -1,16 +1,24 @@
+import { USER } from "@/constants/vars";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import getUserAction from "@/presentation/actions/get-user.action";
 import { Ionicons } from "@expo/vector-icons";
 import {
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import { useQuery } from "@tanstack/react-query";
 import { Image, Text, View } from "react-native";
 import { Colors } from "../../../constants/colors";
 
 export function CustomDrawerContent(props: any) {
   const colorScheme = useColorScheme();
   const themeColors = colorScheme === "dark" ? Colors.dark : Colors.light;
+
+  const query = useQuery({
+    queryKey: [USER],
+    queryFn: getUserAction,
+  });
 
   return (
     <View className="flex-1 bg-light-surface dark:bg-dark-surface">
@@ -19,7 +27,6 @@ export function CustomDrawerContent(props: any) {
         contentContainerStyle={{ paddingTop: 0 }}
       >
         <View className="bg-light-primary dark:bg-dark-primary h-52 px-6 justify-between py-6 pb-8 rounded-br-[3rem]">
-          {/* Nombre de la app discreto arriba */}
           <View className="flex-row items-center justify-end mt-2 opacity-70">
             <Ionicons
               name="terminal"
@@ -32,17 +39,24 @@ export function CustomDrawerContent(props: any) {
             </Text>
           </View>
 
-          {/* Perfil del Usuario */}
           <View>
-            <Image
-              source={{ uri: "https://i.pravatar.cc/150?u=dev" }}
-              className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3"
-            />
+            {!query.data?.photo ? (
+              <Image
+                source={{ uri: "https://i.pravatar.cc/150?u=dev" }}
+                className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3"
+              />
+            ) : (
+              <Image
+                source={{ uri: query.data.photo }}
+                className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3"
+                resizeMode="cover"
+              />
+            )}
             <Text className="text-white font-bold text-xl font-sans">
-              Alex Developer
+              {query.data?.name}
             </Text>
             <Text className="text-white/80 font-medium text-sm mt-1 font-sans">
-              alex@developer.com
+              {query.data?.lastName}
             </Text>
           </View>
         </View>
@@ -53,26 +67,7 @@ export function CustomDrawerContent(props: any) {
           <View className="h-[1px] bg-light-border dark:bg-dark-border mb-3 mt-1 mx-2" />
 
           <DrawerItem
-            label="Iniciar Sesión"
-            icon={({ focused, size }) => (
-              <View
-                className="w-9 h-9 rounded-xl items-center justify-center"
-                style={{ backgroundColor: themeColors.success + "15" }}
-              >
-                <Ionicons
-                  name={focused ? "log-in" : "log-in-outline"}
-                  size={20}
-                  color={themeColors.success}
-                />
-              </View>
-            )}
-            inactiveTintColor={themeColors.text}
-            activeTintColor={themeColors.primary}
-            labelStyle={props.labelStyle}
-            onPress={() => props.navigation.navigate("auth/login/index")}
-          />
-          <DrawerItem
-            label="Registrarse"
+            label={!query.data ? "Agrega tus datos" : "Actualizar tus datos"}
             icon={({ focused, size }) => (
               <View
                 className="w-9 h-9 rounded-xl items-center justify-center"
@@ -85,7 +80,7 @@ export function CustomDrawerContent(props: any) {
                 />
               </View>
             )}
-            inactiveTintColor={themeColors.text}
+            inactiveTintColor={themeColors.icon}
             activeTintColor={themeColors.primary}
             labelStyle={props.labelStyle}
             onPress={() => props.navigation.navigate("auth/register/index")}
@@ -105,21 +100,11 @@ export function CustomDrawerContent(props: any) {
                 />
               </View>
             )}
-            inactiveTintColor={themeColors.text}
+            inactiveTintColor={themeColors.icon}
             activeTintColor={themeColors.primary}
             labelStyle={props.labelStyle}
             onPress={() => props.navigation.navigate("configuration/index")}
           />
-          {/* <DrawerItem
-            label="Cerrar Sesión"
-            icon={({ color, size }: { color: string; size: number }) => (
-              <Ionicons name="log-out-outline" size={22} color={color} />
-            )}
-            inactiveTintColor={props.inactiveTintColor}
-            activeTintColor={props.activeTintColor}
-            labelStyle={props.labelStyle}
-            onPress={() => props.navigation.navigate("auth/login/index")}
-          /> */}
         </View>
       </DrawerContentScrollView>
 
