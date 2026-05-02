@@ -32,8 +32,8 @@ export default function CommentsContent({ project_id, color }: Props) {
             No hay comentarios
           </Text>
         ) : (
-          queryComments.data?.map((comment, index) => (
-            <View key={comment.id + index} className="mb-8 relative">
+          queryComments.data?.map((comment, _) => (
+            <View key={comment.id + comment.content} className="mb-8 relative">
               <View className="absolute w-8 h-8 rounded-full -left-[41.5px] top-1 bg-light-background dark:bg-dark-background items-center justify-center border border-light-border dark:border-dark-border">
                 <Ionicons name="checkmark-circle" size={14} color={color} />
               </View>

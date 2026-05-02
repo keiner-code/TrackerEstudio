@@ -1,13 +1,16 @@
 import { USER } from "@/constants/vars";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { CreateUser, User } from "@/interfaces";
 import { createUserAction } from "@/presentation/actions/create-user.action";
 import getUserAction from "@/presentation/actions/get-user.action";
+import { updateUserAction } from "@/presentation/actions/update-user.action";
 import { Ionicons } from "@expo/vector-icons";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -35,6 +38,7 @@ export default function RegisterScreen() {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? Colors.dark : Colors.light;
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [current, setCurrent] = useState<TypeInputs>({
     age: "",
@@ -49,7 +53,7 @@ export default function RegisterScreen() {
     error_name: "",
   });
 
-  const query = useQuery({
+  const queryUser = useQuery({
     queryKey: [USER],
     queryFn: getUserAction,
     select(data) {
@@ -111,21 +115,48 @@ export default function RegisterScreen() {
     return true;
   };
 
+  const createUserMutation = useMutation({
+    mutationFn: (user: CreateUser) =>
+      createUserAction(user.name, user.lastName, user.age, user.photo),
+    onSuccess() {
+      router.navigate("/(home)");
+    },
+  });
+
+  const updateUserMutation = useMutation({
+    mutationFn: (user: User) => updateUserAction(user),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [USER] });
+      Alert.alert("¡Éxito!", "Usuario Actualizado");
+    },
+  });
+
   const handlerToggle = async () => {
     if (!validationInput()) return;
 
-    //Add
-    if (query.data === null) {
-      setCurrentError({ error_age: "", error_lastName: "", error_name: "" });
-      const { ok } = await createUserAction(
-        current.name,
-        current.lastName,
-        Number(current.age),
-        photoUri,
-      );
+    const currentData = {
+      name: current.name,
+      lastName: current.lastName,
+      age: Number(current.age),
+      photo: photoUri,
+    };
 
-      if (ok) router.navigate("/(home)");
+    //Add
+    if (queryUser.data === null) {
+      setCurrentError({ error_age: "", error_lastName: "", error_name: "" });
+      createUserMutation.mutate({
+        ...currentData,
+      });
       return;
+    }
+    setCurrentError({ error_age: "", error_lastName: "", error_name: "" });
+    //Update
+    if (queryUser.data) {
+      updateUserMutation.mutate({
+        id: queryUser.data.id,
+        photo: photoUri,
+        ...current,
+      });
     }
   };
 
@@ -287,7 +318,7 @@ export default function RegisterScreen() {
             onPress={() => handlerToggle()}
           >
             <Text className="text-white font-bold font-sans text-[17px]">
-              {!query.data ? "Comenzar ahora" : "Actualizar ahora"}
+              {!queryUser.data ? "Comenzar ahora" : "Actualizar ahora"}
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,6 +1,7 @@
 import { useHomeScreen } from "@/presentation/hooks/useHomeScreen";
 import { formatHour } from "@/utils/formatHour";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import {
   ActivityIndicator,
   ScrollView,
@@ -10,8 +11,14 @@ import {
 } from "react-native";
 
 export default function HomeScreen() {
-  const { currentDate, queryProject, theme, customHourShow, queryComments } =
-    useHomeScreen();
+  const {
+    currentDate,
+    queryProject,
+    theme,
+    customHourShow,
+    queryComments,
+    queryUser,
+  } = useHomeScreen();
 
   return (
     <ScrollView
@@ -23,7 +30,7 @@ export default function HomeScreen() {
           {currentDate}
         </Text>
         <Text className="text-3xl font-bold font-sans text-light-text dark:text-dark-text">
-          Hola, Developer 👋
+          Hola, {!queryUser.data ? "Developer" : queryUser.data.name} 👋
         </Text>
       </View>
 
@@ -53,10 +60,17 @@ export default function HomeScreen() {
         </View>
       ) : (
         <>
-          <View
-            style={{ backgroundColor: queryProject.data![0].language.color }}
-            className="p-6 rounded-3xl mb-6 shadow-sm"
+          <Link
+            href={{
+              pathname: "/details/[id]",
+              params: { id: !queryProject.data ? "" : queryProject.data[0].id },
+            }}
+            asChild
           >
+            <TouchableOpacity
+              style={{ backgroundColor: queryProject.data![0].language.color }}
+              className="p-6 rounded-3xl mb-6 shadow-sm"
+            >
             <View className="flex-row justify-between items-center mb-6">
               <View>
                 <Text className="text-white/80 font-medium font-sans text-sm mb-1">
@@ -91,7 +105,8 @@ export default function HomeScreen() {
                 />
               </View>
             </View>
-          </View>
+            </TouchableOpacity>
+          </Link>
 
           <View className="flex-row justify-between mb-8">
             <View className="bg-light-surface dark:bg-dark-surface p-5 rounded-3xl w-[48%] shadow-sm border border-transparent dark:border-dark-border">
@@ -153,16 +168,7 @@ export default function HomeScreen() {
                     />
                   </View>
                   <View className="flex-1">
-                    <Text
-                      className="text-light-text dark:text-dark-text font-semibold font-sans text-base"
-                      numberOfLines={1}
-                    >
-                      Comentario
-                    </Text>
-                    <Text
-                      className="text-light-icon dark:text-dark-icon font-sans text-xs mt-0.5"
-                      numberOfLines={1}
-                    >
+                    <Text className="text-light-icon dark:text-dark-icon font-sans text-xs mt-0.5">
                       {item.content}
                     </Text>
                   </View>

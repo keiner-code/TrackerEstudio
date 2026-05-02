@@ -4,6 +4,6 @@ export const days_of_week = [
   { label: "Miercoles", value: "mié" },
   { label: "Jueves", value: "jue" },
   { label: "Viernes", value: "vie" },
-  { label: "Sabado", value: "sab" },
+  { label: "Sabado", value: "sáb" },
   { label: "Domingo", value: "dom" },
 ];

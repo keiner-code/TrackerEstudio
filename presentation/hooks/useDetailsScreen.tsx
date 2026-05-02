@@ -2,11 +2,13 @@ import { Colors } from "@/constants/colors";
 import { PROJECT } from "@/constants/vars";
 import { Project } from "@/interfaces";
 import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
 import getAllProyectsAction from "../actions/get-all-proyect.action";
 
 export function useDetailsScreen() {
+  const { id } = useLocalSearchParams();
   const [selectedItem, setSelectedItem] = useState<Project>();
   const [pickerVisible, setPickerVisible] = useState(false);
   const colorScheme = useColorScheme();
@@ -20,12 +22,14 @@ export function useDetailsScreen() {
   useEffect(() => {
     if (queryProjects.data && queryProjects.data.length > 0) {
       setSelectedItem((prev) => {
-        if (!prev) return queryProjects.data[0];
-        const updatedItem = queryProjects.data.find((p) => p.id === prev.id);
+        if (!prev && id === undefined) return queryProjects.data[0];
+        const updatedItem = queryProjects.data.find(
+          (p) => p.id === Number(id as string),
+        );
         return updatedItem ?? queryProjects.data[0];
       });
     }
-  }, [queryProjects.data]);
+  }, [queryProjects.data, id]);
 
   return {
     theme,

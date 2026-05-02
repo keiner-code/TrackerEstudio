@@ -37,7 +37,8 @@ export class CommentDao {
     try {
       const data: ProjectComment[] = [];
       const result = await this.db.getAllAsync(
-        `SELECT * FROM project_comments WHERE project_id = ?`,
+        `SELECT * FROM project_comments WHERE project_id = ?
+        ORDER BY created_at DESC`,
         [project_id],
       );
 

@@ -1,9 +1,10 @@
-import { COMMENTS, PROJECT, THEME } from "@/constants/vars";
+import { COMMENTS, PROJECT, THEME, USER } from "@/constants/vars";
 import { formatHour } from "@/utils/formatHour";
 import { useQuery } from "@tanstack/react-query";
 import { useColorScheme } from "react-native";
 import { getAllCommentsByProjectIdAction } from "../actions/get-all-comments-by-project-id.action";
 import { getAllProjectByDayOfWeekAction } from "../actions/get-all-project-by-day-of-week.action";
+import getUserAction from "../actions/get-user.action";
 
 export function useHomeScreen() {
   const colorScheme = useColorScheme();
@@ -19,6 +20,12 @@ export function useHomeScreen() {
   const queryProject = useQuery({
     queryKey: [PROJECT, safeDay],
     queryFn: () => getAllProjectByDayOfWeekAction(safeDay),
+    staleTime: 1000 * 60 * 60 * 24,
+  });
+
+  const queryUser = useQuery({
+    queryKey: [USER],
+    queryFn: getUserAction,
     staleTime: 1000 * 60 * 60 * 24,
   });
 
@@ -53,5 +60,12 @@ export function useHomeScreen() {
     enabled: !!projectId,
   });
 
-  return { queryComments, customHourShow, theme, currentDate, queryProject };
+  return {
+    queryComments,
+    customHourShow,
+    theme,
+    currentDate,
+    queryProject,
+    queryUser,
+  };
 }

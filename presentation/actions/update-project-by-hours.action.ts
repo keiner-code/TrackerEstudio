@@ -13,6 +13,7 @@ export default async function updateProjectByHoursAction(
     );
 
     if (!isUpdateHoursForDay) return false;
+    console.log(current_total_hours, hours_for_day);
 
     const total_hours = current_total_hours + hours_for_day;
 

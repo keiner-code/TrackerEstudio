@@ -93,7 +93,7 @@ export default function CustomDrawer() {
         }}
       />
       <Drawer.Screen
-        name="details/index"
+        name="details/[id]"
         options={{
           title: " Detalles",
           drawerIcon: ({ focused, size }) => (

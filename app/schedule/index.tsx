@@ -3,6 +3,7 @@ import { getAllProjectByDayOfWeekAction } from "@/presentation/actions/get-all-p
 import { getNextSevenDays } from "@/utils/customDate";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -10,6 +11,7 @@ export default function ScheduleScreen() {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Intl.DateTimeFormat("es-ES", { weekday: "short" }).format(new Date()),
   );
+  const router = useRouter();
 
   const queryWeekDays = useQuery({
     queryKey: ["seven-days"],
@@ -114,7 +116,15 @@ export default function ScheduleScreen() {
                     {item.language.name}
                   </Text>
 
-                  <TouchableOpacity className="bg-light-surface dark:bg-dark-surface p-4 rounded-3xl shadow-sm border border-transparent dark:border-dark-border flex-row items-start">
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.navigate({
+                        pathname: "/details/[id]",
+                        params: { id: item.id },
+                      })
+                    }
+                    className="bg-light-surface dark:bg-dark-surface p-4 rounded-3xl shadow-sm border border-transparent dark:border-dark-border flex-row items-start"
+                  >
                     <View
                       className="w-12 h-12 rounded-2xl items-center justify-center mr-4"
                       style={{ backgroundColor: item.language.color + "20" }}

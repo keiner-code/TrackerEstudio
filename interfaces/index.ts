@@ -37,8 +37,15 @@ export interface User {
   lastName: string;
   age: string;
   photo?: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateUser {
+  name: string;
+  lastName: string;
+  age: number;
+  photo: string | null;
 }
 
 export interface createProject {

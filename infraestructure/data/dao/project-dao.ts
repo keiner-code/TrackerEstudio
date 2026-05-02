@@ -113,7 +113,7 @@ export class ProjectDao {
         `SELECT 
           p.id,p.title,p.language_id,p.progress,
           p.hours_per_day,p.description,p.status, 
-          l.name,l.icon,l.color,
+          p.total_hours,l.name,l.icon,l.color,
           COALESCE(
             (
               SELECT json_group_array(

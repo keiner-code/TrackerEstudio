@@ -34,6 +34,28 @@ export class UserDao {
     }
   }
 
+  async update(user: User) {
+    const statement = await this.db.prepareAsync(
+      `UPDATE user SET name = ?, last_name = ?, age = ?, updated_at = ?, photo = ? WHERE id = ?`,
+    );
+    try {
+      await statement.executeAsync(
+        user.name,
+        user.lastName,
+        user.age,
+        new Date().toISOString(),
+        user.photo ?? null,
+        user.id,
+      );
+      return true;
+    } catch (error) {
+      console.error("Error updating project progress:", error);
+      return false;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }
+
   delete() {}
 
   async getUser(): Promise<User | null> {
