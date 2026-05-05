@@ -22,10 +22,14 @@ export function useDetailsScreen() {
   useEffect(() => {
     if (queryProjects.data && queryProjects.data.length > 0) {
       setSelectedItem((prev) => {
-        if (!prev && id === undefined) return queryProjects.data[0];
-        const updatedItem = queryProjects.data.find(
-          (p) => p.id === Number(id as string),
-        );
+        if (!prev) {
+          const found = id
+            ? queryProjects.data.find((p) => p.id === Number(id))
+            : undefined;
+          return found ?? queryProjects.data[0];
+        }
+
+        const updatedItem = queryProjects.data.find((p) => p.id === prev.id);
         return updatedItem ?? queryProjects.data[0];
       });
     }

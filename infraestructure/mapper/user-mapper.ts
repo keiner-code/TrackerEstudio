@@ -3,7 +3,7 @@ import { User } from "@/interfaces";
 export class UserMapper {
   static dbToJson(item: any): User {
     return {
-      id: item.id,
+      id: item.id === null ? null : item.id,
       age: String(item.age) ?? "",
       lastName: item.last_name ?? "",
       name: item.name ?? "",

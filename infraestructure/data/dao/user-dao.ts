@@ -39,6 +39,7 @@ export class UserDao {
       `UPDATE user SET name = ?, last_name = ?, age = ?, updated_at = ?, photo = ? WHERE id = ?`,
     );
     try {
+      if (user === null) return false;
       await statement.executeAsync(
         user.name,
         user.lastName,
@@ -61,6 +62,7 @@ export class UserDao {
   async getUser(): Promise<User | null> {
     try {
       const result = await this.db.getFirstAsync(`SELECT * FROM user`);
+      if (result === null) return null;
 
       return UserMapper.dbToJson(result);
     } catch (error) {
