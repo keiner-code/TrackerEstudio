@@ -8,7 +8,8 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { useQuery } from "@tanstack/react-query";
-import { Image, Text, View } from "react-native";
+import { Image } from "expo-image";
+import { Text, View } from "react-native";
 import { Colors } from "../../../constants/colors";
 
 export function CustomDrawerContent(props: any) {
@@ -41,16 +42,20 @@ export function CustomDrawerContent(props: any) {
 
           <View>
             {!query.data?.photo ? (
-              <Image
-                source={{ uri: "https://i.pravatar.cc/150?u=dev" }}
-                className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3"
-              />
+              <View className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3 overflow-hidden">
+                <Image
+                  source={{ uri: "https://i.pravatar.cc/150?u=dev" }}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </View>
             ) : (
-              <Image
-                source={{ uri: query.data.photo }}
-                className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3"
-                resizeMode="cover"
-              />
+              <View className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3 overflow-hidden">
+                <Image
+                  source={{ uri: query.data.photo }}
+                  style={{ width: '100%', height: '100%' }}
+                  contentFit="cover"
+                />
+              </View>
             )}
             <Text className="text-white font-bold text-xl font-sans">
               {query.data?.name}

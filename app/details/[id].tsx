@@ -3,12 +3,15 @@ import CommentInputText from "@/presentation/components/details/CommentInputText
 import CommentsContent from "@/presentation/components/details/CommetsContent";
 import ModalSelectorProject from "@/presentation/components/details/ModalSelectorProject";
 import ProgressCard from "@/presentation/components/details/ProgressCard";
+import ModalToggleProject from "@/presentation/components/proyects/ModalToggleProject";
 import { useDetailsScreen } from "@/presentation/hooks/useDetailsScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -16,6 +19,7 @@ import {
 } from "react-native";
 
 export default function DetailsScreen() {
+  const [isModalProjectVisible, setisModalCreateVisible] = useState(false);
   const {
     selectedItem,
     setPickerVisible,
@@ -85,13 +89,14 @@ export default function DetailsScreen() {
             >
               <View className="mb-6">
                 <View className="flex-row items-center mb-3">
-                  <View className="bg-light-primary/20 dark:bg-dark-primary/20 px-3 py-1.5 rounded-full mr-3 border border-transparent dark:border-dark-border">
-                    <Text className="text-light-primary dark:text-dark-primary font-mono font-bold text-xs uppercase tracking-wider">
-                      {selectedItem.status}
-                    </Text>
-                  </View>
+                  <Pressable onPress={() => setisModalCreateVisible(true)}>
+                    <View className="bg-light-primary/20 dark:bg-dark-primary/20 px-3 py-1.5 rounded-full mr-3 border border-transparent dark:border-dark-border">
+                      <Text className="text-light-success dark:text-dark-success font-mono font-bold text-xs uppercase tracking-wider">
+                        Editar
+                      </Text>
+                    </View>
+                  </Pressable>
                 </View>
-
                 <ProgressCard
                   progress={selectedItem.progress}
                   project_id={selectedItem.id}
@@ -121,6 +126,13 @@ export default function DetailsScreen() {
             setPickerVisible={setPickerVisible}
             setSelectedItem={setSelectedItem}
             projects={projects}
+          />
+
+          <ModalToggleProject
+            isModalVisible={isModalProjectVisible}
+            setModalVisible={setisModalCreateVisible}
+            isCreate={false}
+            project={selectedItem}
           />
         </>
       )}

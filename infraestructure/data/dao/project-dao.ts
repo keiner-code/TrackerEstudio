@@ -1,11 +1,11 @@
 import { ProjectMapper } from "@/infraestructure/mapper/project-mapper";
-import { createProject, Project } from "../../../interfaces";
+import { CreateProject, Project, UpdateProject } from "../../../interfaces";
 import { sqliteDatabase } from "../bd/sqlite-database";
 
 export class ProjectDao {
   private db = sqliteDatabase;
 
-  async create(project: createProject): Promise<number | false> {
+  async create(project: CreateProject): Promise<number | false> {
     const statement = await this.db.prepareAsync(
       `INSERT INTO projects (title, language_id, description, study_day, created_at, updated_at) 
       VALUES (?, ?, ?, ?, ?, ?)`,
@@ -53,6 +53,37 @@ export class ProjectDao {
       return true;
     } catch (error) {
       console.error("Error updating project hours_for_day:", error);
+      return false;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }
+
+  async update(project: UpdateProject): Promise<boolean> {
+    const { id, title, language_id, study_day, description } = project;
+
+    const statement = await this.db.prepareAsync(
+      `UPDATE projects SET title = ?, language_id = ?, description = ?, study_day = ?, updated_at = ? WHERE id = ?`,
+    );
+    if (
+      title === undefined ||
+      language_id === undefined ||
+      description === undefined ||
+      study_day === undefined
+    )
+      return false;
+    try {
+      await statement.executeAsync(
+        title,
+        language_id,
+        description,
+        study_day,
+        new Date().toISOString(),
+        id,
+      );
+      return true;
+    } catch (error) {
+      console.error("Error updating project:", error);
       return false;
     } finally {
       await statement.finalizeAsync();
@@ -113,7 +144,7 @@ export class ProjectDao {
         `SELECT 
           p.id,p.title,p.language_id,p.progress,
           p.hours_per_day,p.description,p.status, 
-          p.total_hours,l.name,l.icon,l.color,
+          p.total_hours,p.study_day,l.name,l.icon,l.color,
           COALESCE(
             (
               SELECT json_group_array(

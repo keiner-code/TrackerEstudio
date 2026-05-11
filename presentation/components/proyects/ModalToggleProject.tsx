@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/colors";
 import { days_of_week } from "@/constants/day_of_week";
-import useModalCreate from "@/presentation/hooks/useModalCreate";
+import { Project } from "@/interfaces";
+import useModalToggleProject from "@/presentation/hooks/useModalToggleProject";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { Controller } from "react-hook-form";
@@ -17,11 +18,15 @@ import CustomTextInput from "../shared/customTextInput";
 interface Props {
   isModalVisible: boolean;
   setModalVisible: (value: boolean) => void;
+  isCreate: boolean;
+  project?: Project | undefined;
 }
 
-export default function ModalCreateProject({
+export default function ModalToggleProject({
   isModalVisible,
   setModalVisible,
+  isCreate,
+  project,
 }: Props) {
   const colorScheme = useColorScheme() === "dark" ? Colors.dark : Colors.light;
 
@@ -29,10 +34,10 @@ export default function ModalCreateProject({
     control,
     handleSubmit,
     errors,
-    mutation,
-    handleCreateProject,
+    createMutation,
+    handleToggleProject,
     queryLanguages,
-  } = useModalCreate(setModalVisible);
+  } = useModalToggleProject(setModalVisible, isCreate, project);
 
   return (
     <Modal
@@ -48,11 +53,11 @@ export default function ModalCreateProject({
         <View className="w-full bg-light-surface dark:bg-dark-surface rounded-3xl p-6 shadow-lg border border-transparent dark:border-dark-border">
           <View className="flex-row justify-between items-center mb-6">
             <Text className="text-2xl font-bold font-sans text-light-text dark:text-dark-text">
-              Nuevo Proyecto
+              {isCreate ? "Nuevo" : "Editar"} Proyecto
             </Text>
-            {mutation.isError && (
+            {createMutation.isError && (
               <Text className="text-red-500 font-bold font-sans text-base">
-                Error al crear el proyecto
+                Error al {isCreate ? "Crear" : "Editar"} el proyecto
               </Text>
             )}
             <TouchableOpacity
@@ -114,21 +119,23 @@ export default function ModalCreateProject({
                       />
 
                       {queryLanguages.data?.length === 0 ? (
-                        <View className="flex-row items-center">
-                          <Text>
-                            Por favor agrege un lenguage de programacion
-                          </Text>
-                        </View>
+                        <Picker.Item
+                          label="Por favor agregue un lenguaje de programación"
+                          value=""
+                          color={colorScheme.text}
+                        />
                       ) : queryLanguages.isPending ? (
-                        <View className="flex-row items-center">
-                          <Text>Cargando...</Text>
-                        </View>
+                        <Picker.Item
+                          label="Cargando..."
+                          value=""
+                          color={colorScheme.text}
+                        />
                       ) : (
                         queryLanguages.data!.map((option) => (
                           <Picker.Item
                             key={option.id}
                             label={option.name}
-                            value={option.id}
+                            value={option.id.toString()}
                             color={option.color}
                           />
                         ))
@@ -206,11 +213,11 @@ export default function ModalCreateProject({
           />
 
           <TouchableOpacity
-            onPress={handleSubmit(handleCreateProject)}
+            onPress={handleSubmit(handleToggleProject)}
             className="bg-light-primary dark:bg-dark-primary py-4 rounded-full items-center mb-2"
           >
             <Text className="text-white font-bold font-sans text-base">
-              Crear Proyecto
+              {isCreate ? "Crear" : "Editar"} Proyecto
             </Text>
           </TouchableOpacity>
         </View>

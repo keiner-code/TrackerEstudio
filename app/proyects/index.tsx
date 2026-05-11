@@ -2,7 +2,7 @@ import { THEME } from "@/constants/vars";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import LanguageCards from "@/presentation/components/proyects/LanguageCards";
 import ModalCreateLanguaje from "@/presentation/components/proyects/ModalCreateLanguaje";
-import ModalCreateProject from "@/presentation/components/proyects/ModalCreateProject";
+import ModalCreateProject from "@/presentation/components/proyects/ModalToggleProject";
 import ProjectsCards from "@/presentation/components/proyects/ProjectsCards";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -63,6 +63,7 @@ export default function ProyectsScreen() {
       <ModalCreateProject
         isModalVisible={isModalProjectVisible}
         setModalVisible={setisModalCreateVisible}
+        isCreate={true}
       />
     </ScrollView>
   );

@@ -3,8 +3,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useRef } from "react";
 
+import { Image } from "expo-image";
 import {
-  Image,
   KeyboardAvoidingView,
   ScrollView,
   Text,
@@ -71,8 +71,8 @@ export default function RegisterScreen() {
             {photoUri ? (
               <Image
                 source={{ uri: photoUri }}
-                className="w-full h-full"
-                resizeMode="cover"
+                style={{ width: '100%', height: '100%' }}
+                contentFit="cover"
               />
             ) : (
               <Ionicons name="camera" size={32} color="#ffffff" />

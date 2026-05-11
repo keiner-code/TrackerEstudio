@@ -11,6 +11,7 @@ export interface Project {
   study_day: string;
   created_at: string;
   updated_at: string;
+  language_id: number;
 }
 
 export interface Language {
@@ -48,11 +49,15 @@ export interface CreateUser {
   photo: string | null;
 }
 
-export interface createProject {
+export interface CreateProject {
   title: string;
   language_id: string;
   description: string;
   study_day: string;
+}
+
+export interface UpdateProject extends Partial<CreateProject> {
+  id: number;
 }
 
 export interface ProjectComment {

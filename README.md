@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# 📅 Tracker Estudio
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Tracker Estudio** es una aplicación móvil desarrollada con React Native y Expo, diseñada para ayudar a los desarrolladores y estudiantes a gestionar su tiempo de estudio, organizar proyectos de programación por lenguajes, y llevar un registro detallado del progreso diario.
 
-## Get started
+## 🚀 Características Principales
 
-1. Install dependencies
+- **Gestión de Perfil:** Crea y edita tu perfil de usuario, incluyendo una fotografía (con soporte persistente local).
+- **Proyectos y Lenguajes:** Registra nuevos lenguajes de programación y asócialos a proyectos de estudio.
+- **Agenda Semanal:** Asigna días específicos de la semana para trabajar en tus proyectos y mantén tu enfoque.
+- **Seguimiento de Tiempo:** Registra las horas invertidas por día y visualiza el progreso y total de horas acumuladas en cada proyecto.
+- **Comentarios y Notas:** Añade notas o comentarios a cada proyecto para no perder el hilo de tus avances.
+- **Modo Oscuro/Claro:** Interfaz de usuario adaptativa impulsada por NativeWind (TailwindCSS) con soporte completo para temas del sistema.
+- **100% Offline:** Persistencia de datos local utilizando SQLite, sin depender de conexión a internet.
 
+## 🛠️ Tecnologías y Herramientas
+
+Este proyecto está construido sobre el ecosistema moderno de React Native:
+
+- **Framework:** [Expo](https://expo.dev/) (SDK 52+) / [React Native](https://reactnative.dev/)
+- **Navegación:** [Expo Router](https://docs.expo.dev/router/introduction/) (Enrutamiento basado en archivos) junto con React Navigation (Drawer & Tabs).
+- **Estilos:** [NativeWind v4](https://www.nativewind.dev/) (TailwindCSS para React Native).
+- **Manejo de Estado Remoto / Asíncrono:** [TanStack React Query v5](https://tanstack.com/query/latest)
+- **Formularios:** [React Hook Form](https://react-hook-form.com/)
+- **Base de Datos:** [Expo SQLite](https://docs.expo.dev/versions/latest/sdk/sqlite/)
+- **Manejo de Imágenes:** `expo-image` y `expo-image-picker` para manejo optimizado de fotos locales y UI.
+
+## 📦 Instalación y Configuración
+
+Sigue estos pasos para correr el proyecto localmente:
+
+1. **Clonar el repositorio** (si aplica) o descargar el código fuente.
+2. **Instalar dependencias:**
    ```bash
    npm install
    ```
-
-2. Start the app
-
+3. **Iniciar el servidor de desarrollo de Expo:**
    ```bash
+   npm start
+   # o
    npx expo start
    ```
+4. **Ejecutar en el dispositivo:**
+   - Presiona `a` para abrir en un emulador Android.
+   - Presiona `i` para abrir en el simulador de iOS.
+   - O escanea el código QR desde la aplicación **Expo Go** en tu dispositivo físico.
 
-In the output, you'll find options to open the app in a
+> **Nota:** Para compilar el APK de producción, asegúrate de utilizar EAS Build o la configuración nativa de Expo, las configuraciones de imágenes y SQLite ya están optimizadas en `app.json`.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 📁 Estructura del Proyecto
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+TrackerEstudio/
+├── app/                  # Rutas principales y pantallas (Expo Router)
+│   ├── (tabs)/           # Navegación principal
+│   ├── auth/             # Flujo de registro y perfil
+│   └── ...
+├── components/           # Componentes UI reutilizables
+├── constants/            # Variables de estado, colores y datos por defecto
+├── infraestructure/      # Acceso a datos (DAO), Mappers y Migraciones de SQLite
+├── interfaces/           # Modelos de datos y tipados de TypeScript
+├── presentation/         # Hooks personalizados, Acciones (Actions) y Componentes de Vistas
+├── utils/                # Funciones auxiliares y formateadores
+└── app.json              # Configuración general de la app de Expo
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 👨‍💻 Autor
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Desarrollado con ❤️ por **keiner-code**.

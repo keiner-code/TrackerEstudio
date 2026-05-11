@@ -14,6 +14,7 @@ export class ProjectMapper {
       total_hours: item.total_hours ?? 0,
       study_day: item.study_day ?? "",
       id: item.id,
+      language_id: item.language_id,
       language: LanguageMapper.dbToJson({ ...item }),
       progress: item.progress ?? 0,
       status: item.status ?? "",
