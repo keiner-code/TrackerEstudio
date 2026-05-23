@@ -42,17 +42,17 @@ export function CustomDrawerContent(props: any) {
 
           <View>
             {!query.data?.photo ? (
-              <View className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3 overflow-hidden">
+              <View className="w-16 h-16 rounded-2xl border-2 border-transparent mb-3 overflow-hidden">
                 <Image
-                  source={{ uri: "https://i.pravatar.cc/150?u=dev" }}
-                  style={{ width: '100%', height: '100%' }}
+                  source={require("@/assets/images/profile.png")}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </View>
             ) : (
               <View className="w-16 h-16 rounded-2xl border-2 border-white/20 mb-3 overflow-hidden">
                 <Image
                   source={{ uri: query.data.photo }}
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: "100%", height: "100%" }}
                   contentFit="cover"
                 />
               </View>

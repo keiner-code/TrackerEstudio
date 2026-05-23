@@ -25,7 +25,10 @@ import "../global.css";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { runMigrations } from "@/infraestructure/data/migrations/migration-executor";
+import { registerForPushNotificationAsync } from "@/infraestructure/services/registerPushNotification";
 import CustomDrawer from "@/presentation/components/layouts/CustomDrawer";
+import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 
 const DATABASE_NAME = process.env.EXPO_PUBLIC_DATABASE_NAME;
 
@@ -45,6 +48,28 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useDrizzleStudio(DB);
+
+  useEffect(() => {
+    registerForPushNotificationAsync();
+
+    if (Platform.OS === "android") {
+      Notifications.getNotificationChannelsAsync().then((value) => value ?? []);
+    }
+
+    const notificationsListener = Notifications.addNotificationReceivedListener(
+      (notification) => notification,
+    );
+
+    const responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) =>
+        console.log(response),
+      );
+
+    return () => {
+      notificationsListener.remove();
+      responseListener.remove();
+    };
+  }, []);
 
   useEffect(() => {
     if (loaded || error) {
