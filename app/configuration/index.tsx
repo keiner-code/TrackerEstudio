@@ -21,24 +21,6 @@ export default function ConfigurationScreen() {
   const [notifications, setNotifications] = useState(true);
   const [dataSync, setDataSync] = useState(false);
 
-  //!Notifications
-  /* async function schedulePushNotification() {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Youve got mail",
-        body: "Here is the notification body",
-        data: { data: "goes here", test: { test1: "more data" } },
-        sound: "notification.wav",
-      },
-      trigger: {
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-        seconds: 2,
-      },
-    });
-  } */
-
-  //!
-
   const SettingRow = ({
     icon,
     title,

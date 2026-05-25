@@ -25,10 +25,9 @@ import "../global.css";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { runMigrations } from "@/infraestructure/data/migrations/migration-executor";
-import { registerForPushNotificationAsync } from "@/infraestructure/services/registerPushNotification";
+
 import CustomDrawer from "@/presentation/components/layouts/CustomDrawer";
-import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
+import InitialConfigNotificationProvider from "./InitialConfigNotificationProvider";
 
 const DATABASE_NAME = process.env.EXPO_PUBLIC_DATABASE_NAME;
 
@@ -50,28 +49,6 @@ export default function RootLayout() {
   useDrizzleStudio(DB);
 
   useEffect(() => {
-    registerForPushNotificationAsync();
-
-    if (Platform.OS === "android") {
-      Notifications.getNotificationChannelsAsync().then((value) => value ?? []);
-    }
-
-    const notificationsListener = Notifications.addNotificationReceivedListener(
-      (notification) => notification,
-    );
-
-    const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) =>
-        console.log(response),
-      );
-
-    return () => {
-      notificationsListener.remove();
-      responseListener.remove();
-    };
-  }, []);
-
-  useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync().catch(() => {});
     }
@@ -82,16 +59,18 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <QueryClientProvider client={queryClient}>
         <SQLiteProvider
           databaseName={DATABASE_NAME!}
           onInit={async () => runMigrations()}
         >
-          <CustomDrawer />
+          <InitialConfigNotificationProvider>
+            <CustomDrawer />
+          </InitialConfigNotificationProvider>
         </SQLiteProvider>
         <StatusBar style="auto" />
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }

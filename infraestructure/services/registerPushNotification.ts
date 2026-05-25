@@ -12,6 +12,27 @@ Notifications.setNotificationHandler({
   }),
 });
 
+export async function schedulePushNotification(
+  title: string,
+  body: string,
+  data?: Record<string, unknown> | undefined,
+) {
+  await Notifications.cancelAllScheduledNotificationsAsync();
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title,
+      body,
+      data,
+      sound: "notification.wav",
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      hour: 18,
+      minute: 0,
+    },
+  });
+}
+
 export async function registerForPushNotificationAsync() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("myNotificationChannel", {

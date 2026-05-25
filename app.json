@@ -51,6 +51,8 @@
       [
         "expo-notifications",
         {
+          "icon": "./assets/images/icon.png",
+          "defaultChannel": "default",
           "sounds": ["./assets/audio/notification.wav"]
         }
       ],
