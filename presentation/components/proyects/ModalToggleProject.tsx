@@ -3,16 +3,17 @@ import { days_of_week } from "@/constants/day_of_week";
 import { Project } from "@/interfaces";
 import useModalToggleProject from "@/presentation/hooks/useModalToggleProject";
 import { Ionicons } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import {
   Modal,
+  Pressable,
+  ScrollView,
   Text,
   TouchableOpacity,
   useColorScheme,
   View,
 } from "react-native";
-import CustomPickerInput from "../shared/CustomPickerInput";
 import CustomTextInput from "../shared/customTextInput";
 
 interface Props {
@@ -38,6 +39,9 @@ export default function ModalToggleProject({
     handleToggleProject,
     queryLanguages,
   } = useModalToggleProject(setModalVisible, isCreate, project);
+
+  const [openLanguageModal, setOpenLanguageModal] = useState(false);
+  const [openDayModal, setOpenDayModal] = useState(false);
 
   return (
     <Modal
@@ -95,6 +99,10 @@ export default function ModalToggleProject({
               required: true,
             }}
             render={({ field: { onChange, value } }) => {
+              const selectedLanguage = queryLanguages.data?.find(
+                (option) => option.id.toString() === value,
+              );
+
               return (
                 <View className="mb-4">
                   <Text
@@ -104,44 +112,128 @@ export default function ModalToggleProject({
                     Selecione el lenguaje
                   </Text>
 
-                  <View
-                    className="rounded-3xl border"
+                  <Pressable
+                    onPress={() => setOpenLanguageModal(true)}
                     style={{
-                      borderColor: colorScheme.border,
-                      backgroundColor: colorScheme.surface,
+                      paddingInline: 12,
+                      borderRadius: 16,
+                      backgroundColor: colorScheme.background,
                     }}
                   >
-                    <CustomPickerInput onChange={onChange} value={value}>
-                      <Picker.Item
-                        label="Selecciona un lenguaje"
-                        value=""
-                        color={colorScheme.icon}
-                      />
+                    <View className="h-14 w-full rounded-md flex-row items-center gap-2 pl-2">
+                      {selectedLanguage ? (
+                        <Ionicons
+                          name={selectedLanguage.icon as any}
+                          size={20}
+                          color={selectedLanguage.color}
+                        />
+                      ) : null}
+                      <View>
+                        <Text
+                          className="text-lg"
+                          style={{ color: colorScheme.text }}
+                        >
+                          {selectedLanguage?.name ?? "Selecciona un lenguaje"}
+                        </Text>
+                      </View>
+                    </View>
+                  </Pressable>
 
-                      {queryLanguages.data?.length === 0 ? (
-                        <Picker.Item
-                          label="Por favor agregue un lenguaje de programación"
-                          value=""
-                          color={colorScheme.text}
-                        />
-                      ) : queryLanguages.isPending ? (
-                        <Picker.Item
-                          label="Cargando..."
-                          value=""
-                          color={colorScheme.text}
-                        />
-                      ) : (
-                        queryLanguages.data!.map((option) => (
-                          <Picker.Item
-                            key={option.id}
-                            label={option.name}
-                            value={option.id.toString()}
-                            color={option.color}
+                  <Modal
+                    visible={openLanguageModal}
+                    transparent
+                    animationType="fade"
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0,0,0,0.4)",
+                      }}
+                    >
+                      <View
+                        style={{
+                          margin: 24,
+                          borderRadius: 20,
+                          backgroundColor: colorScheme.surface,
+                          padding: 16,
+                        }}
+                      >
+                        <TouchableOpacity
+                          className="items-end"
+                          onPress={() => setOpenLanguageModal(false)}
+                        >
+                          <Ionicons
+                            name="close"
+                            size={24}
+                            color={colorScheme.icon}
                           />
-                        ))
-                      )}
-                    </CustomPickerInput>
-                  </View>
+                        </TouchableOpacity>
+
+                        {queryLanguages.isPending ? (
+                          <Text
+                            style={{
+                              color: colorScheme.text,
+                              paddingVertical: 12,
+                            }}
+                          >
+                            Cargando...
+                          </Text>
+                        ) : queryLanguages.data?.length === 0 ? (
+                          <Text
+                            style={{
+                              color: colorScheme.text,
+                              paddingVertical: 12,
+                            }}
+                          >
+                            Por favor agregue un lenguaje de programación
+                          </Text>
+                        ) : (
+                          <ScrollView
+                            style={{ maxHeight: 350 }}
+                            showsVerticalScrollIndicator={true}
+                          >
+                            {queryLanguages.data!.map((option) => (
+                              <TouchableOpacity
+                                key={option.id}
+                                onPress={() => {
+                                  onChange(option.id.toString());
+                                  setOpenLanguageModal(false);
+                                }}
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  paddingVertical: 12,
+                                }}
+                              >
+                                <Ionicons
+                                  name={option.icon as any}
+                                  size={20}
+                                  color={option.color}
+                                />
+                                <Text
+                                  style={{
+                                    marginLeft: 12,
+                                    color: colorScheme.text,
+                                  }}
+                                >
+                                  {option.name}
+                                </Text>
+                                {value === option.id.toString() && (
+                                  <Ionicons
+                                    name="checkmark"
+                                    color={colorScheme.text}
+                                    size={20}
+                                    style={{ marginLeft: "auto" }}
+                                  />
+                                )}
+                              </TouchableOpacity>
+                            ))}
+                          </ScrollView>
+                        )}
+                      </View>
+                    </View>
+                  </Modal>
                 </View>
               );
             }}
@@ -175,6 +267,10 @@ export default function ModalToggleProject({
               required: true,
             }}
             render={({ field: { onChange, value } }) => {
+              const selectedDay = days_of_week.find(
+                (option) => option.value === value,
+              );
+
               return (
                 <View className="mb-4">
                   <Text
@@ -184,29 +280,106 @@ export default function ModalToggleProject({
                     Selecione el dia que lo trabajara
                   </Text>
 
-                  <View
-                    className="rounded-3xl border"
+                  <Pressable
+                    onPress={() => setOpenDayModal(true)}
                     style={{
-                      borderColor: colorScheme.border,
-                      backgroundColor: colorScheme.surface,
+                      paddingInline: 12,
+                      borderRadius: 16,
+                      backgroundColor: colorScheme.background,
                     }}
                   >
-                    <CustomPickerInput onChange={onChange} value={value}>
-                      <Picker.Item
-                        label="Selecciona un dia"
-                        value=""
+                    <View className="h-14 w-full rounded-md flex-row items-center gap-2 pl-2">
+                      <Ionicons
+                        name="calendar-outline"
+                        size={20}
                         color={colorScheme.icon}
                       />
+                      <View>
+                        <Text
+                          className="text-lg"
+                          style={{ color: colorScheme.text }}
+                        >
+                          {selectedDay?.label ?? "Selecciona un dia"}
+                        </Text>
+                      </View>
+                    </View>
+                  </Pressable>
 
-                      {days_of_week.map((option) => (
-                        <Picker.Item
-                          key={option.value}
-                          label={option.label}
-                          value={option.value}
-                        />
-                      ))}
-                    </CustomPickerInput>
-                  </View>
+                  <Modal
+                    visible={openDayModal}
+                    transparent
+                    animationType="fade"
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0,0,0,0.4)",
+                      }}
+                    >
+                      <View
+                        style={{
+                          margin: 24,
+                          borderRadius: 20,
+                          backgroundColor: colorScheme.surface,
+                          padding: 16,
+                        }}
+                      >
+                        <TouchableOpacity
+                          className="items-end"
+                          onPress={() => setOpenDayModal(false)}
+                        >
+                          <Ionicons
+                            name="close"
+                            size={24}
+                            color={colorScheme.icon}
+                          />
+                        </TouchableOpacity>
+
+                        <ScrollView
+                          style={{ maxHeight: 350 }}
+                          showsVerticalScrollIndicator={true}
+                        >
+                          {days_of_week.map((option) => (
+                            <TouchableOpacity
+                              key={option.value}
+                              onPress={() => {
+                                onChange(option.value);
+                                setOpenDayModal(false);
+                              }}
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                paddingVertical: 12,
+                              }}
+                            >
+                              <Ionicons
+                                name="calendar-outline"
+                                size={20}
+                                color={colorScheme.icon}
+                              />
+                              <Text
+                                style={{
+                                  marginLeft: 12,
+                                  color: colorScheme.text,
+                                }}
+                              >
+                                {option.label}
+                              </Text>
+                              {value === option.value && (
+                                <Ionicons
+                                  name="checkmark"
+                                  color={colorScheme.text}
+                                  size={20}
+                                  style={{ marginLeft: "auto" }}
+                                />
+                              )}
+                            </TouchableOpacity>
+                          ))}
+                        </ScrollView>
+                      </View>
+                    </View>
+                  </Modal>
                 </View>
               );
             }}

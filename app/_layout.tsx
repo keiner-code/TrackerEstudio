@@ -27,7 +27,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { runMigrations } from "@/infraestructure/data/migrations/migration-executor";
 
 import CustomDrawer from "@/presentation/components/layouts/CustomDrawer";
-import InitialConfigNotificationProvider from "./InitialConfigNotificationProvider";
+import InitialConfigNotificationProvider from "../presentation/components/providers/InitialConfigNotificationProvider";
 
 const DATABASE_NAME = process.env.EXPO_PUBLIC_DATABASE_NAME;
 

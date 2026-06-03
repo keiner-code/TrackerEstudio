@@ -15,13 +15,17 @@ export default function InitialConfigNotificationProvider({
 }: {
   children: JSX.Element;
 }) {
-  const selectedDate = new Intl.DateTimeFormat("es-ES", {
-    weekday: "short",
-  }).format(new Date());
+  const currentDate = new Date().toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  const safeDay = currentDate.substring(0, 3);
 
   const queryProject = useQuery({
-    queryKey: [SCHEDULE, selectedDate],
-    queryFn: () => getAllProjectByDayOfWeekAction(selectedDate),
+    queryKey: [SCHEDULE, safeDay],
+    queryFn: () => getAllProjectByDayOfWeekAction(safeDay),
     staleTime: 1000 * 60 * 60 * 24,
   });
 

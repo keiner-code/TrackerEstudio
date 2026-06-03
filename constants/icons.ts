@@ -1,4 +1,4 @@
-export const iconOptions = [
+export const languageData = [
   {
     id: "javascript",
     icon: "logo-javascript",
@@ -18,4 +18,25 @@ export const iconOptions = [
   { id: "php", icon: "help-buoy-outline", color: "#777BB4", label: "PHP" },
   { id: "kotlin", icon: "terminal-outline", color: "#0095D5", label: "Kotlin" },
   { id: "dart", icon: "cube-outline", color: "#0175C2", label: "Dart" },
-];
+  { id: "html", icon: "logo-html5", color: "#E34F26", label: "HTML" },
+  { id: "css", icon: "logo-css3", color: "#1572B6", label: "CSS" },
+  { id: "react", icon: "logo-react", color: "#61DAFB", label: "React" },
+  { id: "vue", icon: "logo-vue", color: "#4FC08D", label: "Vue" },
+  { id: "angular", icon: "logo-angular", color: "#DD0031", label: "Angular" },
+  { id: "node", icon: "logo-nodejs", color: "#339933", label: "Node.js" },
+  { id: "git", icon: "git-branch-outline", color: "#F05032", label: "Git" },
+  { id: "github", icon: "logo-github", color: "#181717", label: "GitHub" },
+  { id: "aws", icon: "logo-amazon", color: "#FF9900", label: "AWS" },
+  { id: "azure", icon: "cloud-outline", color: "#0078D4", label: "Azure" },
+  { id: "docker", icon: "logo-docker", color: "#2496ED", label: "Docker" },
+  {
+    id: "kubernetes",
+    icon: "grid-outline",
+    color: "#326CE5",
+    label: "Kubernetes",
+  },
+  { id: "dotnet", icon: "code-slash-outline", color: "#512BD4", label: ".NET" },
+  { id: "next", icon: "triangle-outline", color: "#000000", label: "Next.js" },
+  { id: "nest", icon: "server-outline", color: "#E0234E", label: "NestJS" },
+] as const;
+export type IconOption = (typeof languageData)[number];
