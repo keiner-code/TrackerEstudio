@@ -5,6 +5,7 @@ import {
   schedulePushNotification,
 } from "@/infraestructure/services/registerPushNotification";
 import { getAllProjectByDayOfWeekAction } from "@/presentation/actions/get-all-project-by-day-of-week.action";
+import { useSettingsStore } from "@/store/settingsStore";
 import { useQuery } from "@tanstack/react-query";
 import * as Notifications from "expo-notifications";
 import { JSX, useEffect } from "react";
@@ -15,6 +16,7 @@ export default function InitialConfigNotificationProvider({
 }: {
   children: JSX.Element;
 }) {
+  const isActiveNotification = useSettingsStore((s) => s.isActiveNotification);
   const currentDate = new Date().toLocaleDateString("es-ES", {
     weekday: "long",
     day: "numeric",
@@ -58,24 +60,29 @@ export default function InitialConfigNotificationProvider({
   };
 
   useEffect(() => {
-    customPushLocalNotification();
-    if (Platform.OS === "android") {
-      Notifications.getNotificationChannelsAsync().then((value) => value ?? []);
+    if (isActiveNotification) {
+      customPushLocalNotification();
+      if (Platform.OS === "android") {
+        Notifications.getNotificationChannelsAsync().then(
+          (value) => value ?? [],
+        );
+      }
+
+      const notificationsListener =
+        Notifications.addNotificationReceivedListener(
+          (notification) => notification,
+        );
+
+      const responseListener =
+        Notifications.addNotificationResponseReceivedListener((response) =>
+          console.log(response),
+        );
+
+      return () => {
+        notificationsListener.remove();
+        responseListener.remove();
+      };
     }
-
-    const notificationsListener = Notifications.addNotificationReceivedListener(
-      (notification) => notification,
-    );
-
-    const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) =>
-        console.log(response),
-      );
-
-    return () => {
-      notificationsListener.remove();
-      responseListener.remove();
-    };
   }, [queryProject]);
 
   return children;

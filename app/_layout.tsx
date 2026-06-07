@@ -59,8 +59,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <SQLiteProvider
           databaseName={DATABASE_NAME!}
           onInit={async () => runMigrations()}
@@ -70,7 +70,7 @@ export default function RootLayout() {
           </InitialConfigNotificationProvider>
         </SQLiteProvider>
         <StatusBar style="auto" />
-      </QueryClientProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

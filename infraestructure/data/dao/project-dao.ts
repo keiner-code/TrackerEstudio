@@ -105,7 +105,21 @@ export class ProjectDao {
     }
   }
 
-  delete() {}
+  async delete(id: number) {
+    const statement = await this.db.prepareAsync(
+      "DELETE FROM projects WHERE id = ?",
+    );
+
+    try {
+      await statement.executeAsync(id);
+      return true;
+    } catch (error) {
+      console.error("Error deleting project_id: ", error);
+      return false;
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }
 
   async getAllProjectByDayOfWeek(study_day: string): Promise<Project[]> {
     const statement = await this.db.prepareAsync(

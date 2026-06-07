@@ -1,15 +1,27 @@
 import { PROJECT } from "@/constants/vars";
+import deleteProjectAction from "@/presentation/actions/delete-project.action";
 import getAllProyectsAction from "@/presentation/actions/get-all-proyect.action";
 import { Ionicons } from "@expo/vector-icons";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 export default function ProjectsCards() {
+  const queryClient = useQueryClient();
+
   const projectQuery = useQuery({
     queryKey: [PROJECT],
     queryFn: getAllProyectsAction,
   });
+
+  const mutation = useMutation({
+    mutationFn: deleteProjectAction,
+    onSuccess(data, variables, onMutateResult, context) {
+      queryClient.invalidateQueries({ queryKey: [PROJECT] });
+      Alert.alert("Projecto", "Projecto Eliminado");
+    },
+  });
+
   return (
     <>
       {projectQuery.data?.length === 0 ? (
@@ -43,10 +55,19 @@ export default function ProjectsCards() {
                     {project.language.name}
                   </Text>
                 </View>
-                <View className="bg-light-background dark:bg-dark-background px-3 py-1.5 rounded-full">
-                  <Text className="text-light-text dark:text-dark-text font-mono font-bold text-xs">
-                    {project.progress}%
-                  </Text>
+                <View className="flex-row gap-4">
+                  <View className="bg-light-background dark:bg-dark-background  px-3 py-1.5 rounded-full">
+                    <Text className="text-light-text dark:text-dark-text font-mono font-bold text-xs">
+                      {project.progress}%
+                    </Text>
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      mutation.mutate(project.id);
+                    }}
+                  >
+                    <Ionicons name="trash" size={20} color="red" />
+                  </Pressable>
                 </View>
               </View>
 
